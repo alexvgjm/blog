@@ -39,6 +39,8 @@
 
 .post-summary__excerpt {
     padding-top: var(--h-space);
+    font-style: normal;
+    border-left: none;
 }
 
 .post-summary__header > *:last-child {
@@ -66,6 +68,7 @@
 .post-summary__read-more:visited {
     white-space: nowrap;
     margin-left: auto;
+    margin-bottom: var(--h-em-space);
     color: var(--color-primary);
     border: var(--border-size) solid var(--color-primary);
     padding: var(--q-em-space) var(--h-em-space);

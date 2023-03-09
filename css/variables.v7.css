@@ -127,6 +127,9 @@ body {
     --color-bg-primary-1: var(--color-background-darky);
     --color-bg-primary-2: var(--color-background-darker);
 
+
+    --color-code-bg: var(--color-background-darkest);
+
     --color-link: var(--color-second-light);
     --color-link-visited: var(--color-second-light);
 

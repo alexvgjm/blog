@@ -74,7 +74,7 @@ a:hover {
     text-decoration: underline;
 }
 
-p, li, blockquote {
+p, li, blockquote, figcaption {
     opacity: 0.86;
     font-weight: 350;
 }
@@ -111,16 +111,22 @@ main {
     margin: 0 auto;
 }
 
+code {
+    background-color: var(--color-code-bg);
+    padding: 0.1em 0.5em;
+    display: inline-block;
+    border-radius: 0.3rem;
+    font-family: 'Courier New', Courier, monospace;
+    letter-spacing: normal;
+}
+
 pre {
     margin-top: var(--space);
     background: var(--color-bg-primary-2);
-    padding: var(--space);
     margin: var(--space) 0;
 }
 pre code {
     font-size: 14px;
-    font-family: 'Courier New', Courier, monospace;
-    letter-spacing: normal;
 }
 
 figcaption {
@@ -128,6 +134,16 @@ figcaption {
     text-align: center;
     color: var(--color-font-primary);
     font-weight: normal;
+    font-size: 16px;
+}
+
+q, blockquote {
+    font-style: italic;
+}
+blockquote:not(.post-summary__excerpt) {
+    margin-top: var(--space);
+    border-left: var(--border-size) solid var(--color-second);
+    padding-left: var(--space);
 }
 
 

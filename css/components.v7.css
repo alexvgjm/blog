@@ -6,7 +6,6 @@
     border-radius: var(--border-radius);
     margin-bottom: var(--h-em-space);
     
-    text-transform: capitalize;
 }
 
 .tag:not(:last-child) {

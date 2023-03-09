@@ -21,10 +21,10 @@
     align-items: center;
 }
 
-.page-navigator .to-next::before,
-.page-navigator .to-previous::before,
-.page-navigator .to-first::before,
-.page-navigator .to-last::before {
+.page-navigator__to-next::before,
+.page-navigator__to-previous::before,
+.page-navigator__to-first::before,
+.page-navigator__to-last::before {
     content: '';
     display: block;
     width: 0;
@@ -34,39 +34,35 @@
 
 
 
-.page-navigator .to-first::before {
+.page-navigator__to-first::before {
     border-right: 0.5em solid var(--color-second);
     margin-right: 1em;
 }
 
-.page-navigator .to-previous:hover,
-.page-navigator .to-first:hover,
-.page-navigator .to-next:hover::before,
-.page-navigator .to-last:hover::before {
+.page-navigator__to-next:hover::before,
+.page-navigator__to-last:hover::before {
     border-left-color: var(--color-second-light);
 }
 
-.page-navigator .to-last:hover,
-.page-navigator .to-first:hover::before,
-.page-navigator .to-next:hover,
-.page-navigator .to-previous:hover::before {
+.page-navigator__to-first:hover::before,
+.page-navigator__to-previous:hover::before {
     border-right-color: var(--color-second-light);
 }
 
-.page-navigator .to-previous::before {
+.page-navigator__to-previous::before {
     border-right: 0.5em solid var(--color-second);
     margin-right: 1em;
 }
 
-.page-navigator .to-previous  {
+.page-navigator__to-previous  {
     width: 0.7em;
     height: 0.8em;
     text-align-last: right;
     border: 0.2em solid transparent;
-    border-left: 0.25em solid var(--color-second);
+    /*border-left: 0.25em solid var(--color-second);*/
 }
 
-.page-navigator .to-first {
+.page-navigator__to-first {
     width: 0.3em;
     height: 0.6em;
     text-align-last: right;
@@ -84,25 +80,25 @@
 
 
 
-.page-navigator .to-last::before {
+.page-navigator__to-last::before {
     border-left: 0.5em solid var(--color-second);
     margin-left: 1em;
 }
 
-.page-navigator .to-next::before {
+.page-navigator__to-next::before {
     border-left: 0.5em solid var(--color-second);
     margin-left: 1em;
 }
 
-.page-navigator .to-next  {
+.page-navigator__to-next  {
     width: 0.7em;
     height: 0.8em;
     text-align-last: left;
     border: 0.2em solid transparent;
-    border-right: 0.25em solid var(--color-second);
+    /*border-right: 0.25em solid var(--color-second);*/
 }
 
-.page-navigator .to-last {
+.page-navigator__to-last {
     width: 0.3em;
     height: 0.6em;
     text-align-last: left;

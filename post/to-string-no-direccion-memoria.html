@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="es-ES">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Alexander Vega Jiménez">
+    <link rel="icon" type="image/x-icon" href="https://alexvgjm.github.io/blog/assets/favicon.ico">
+    <meta name="description" content="Llevo desde los catorce años escuchando la soberana mentira de que el método toString de la clase Object imprime por defecto una dirección de memoria. He decidido desmontar el mito.">
+    <title>No, toString NO imprime una dirección de memoria - Álex Vega</title>
+    <link rel="stylesheet" href="https://alexvgjm.github.io/blog/css/main.v7.css">
+    <link rel="stylesheet" media="print" onload="this.media='all'" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/monokai-sublime.min.css">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js" async onload="hljs.highlightAll()"></script>
+    <script src="https://alexvgjm.github.io/blog/assets/scripts/scripts.v7.js"> </script>
+    <script src="https://giscus.app/client.js" data-repo="alexvgjm/blog-comments" data-repo-id="R_kgDOI_Q3UQ" data-category="Announcements" data-category-id="DIC_kwDOI_Q3Uc4CUSLj" data-mapping="og:title" data-strict="0" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="bottom" data-theme="https://alexvgjm.github.io/blog/css/giscus-frame.v7.css" data-lang="es" data-loading="lazy" crossorigin="anonymous" async></script>
+    <meta property="og:url" content="https://alexvgjm.github.io/blog/post/to-string-no-direccion-memoria">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="No, toString NO imprime una dirección de memoria">
+    <meta property="og:description" content="Llevo desde los catorce años escuchando la soberana mentira de que el método toString de la clase Object imprime por defecto una dirección de memoria. He decidido desmontar el mito.">
+    <meta property="og:image" content="https://alexvgjm.github.io/blog/assets/img/alexander-vega-jimenez.png">
+  </head>
+  <body>
+    <button class="menu-button" aria-label="menu"><span></span> <span></span> <span></span> <span></span></button>
+    <header class="main-header">
+      <h1 class="site-title"><a href="https://alexvgjm.github.io/blog/">Álex Vega</a></h1>
+      <div class="site-subtitle"></div>
+      <nav class="main-nav"><a class="main-nav__link main-nav__link--active" href="https://alexvgjm.github.io/blog/">Blog</a><a class="main-nav__link main-nav__link--about " href="https://alexvgjm.github.io/blog/about">Sobre mí</a><a class="main-nav__link main-nav__link--portfolio" href="https://alexvgjm.github.io/">Experimentos</a>
+      </nav>
+    </header>
+    <div class="menu-backdrop"></div>
+    <main>
+      <article class="post">
+        <header class="post__header">
+          <h1 class="post__title">No, toString NO imprime una dirección de memoria</h1>
+          <div class="post__published">Publicado el 
+            <time datetime="2023-03-09T00:00:00.000Z">9 de marzo de 2023</time>
+          </div>
+        </header>
+        <div class="post__content"><p>Llevo desde los catorce años escuchando la soberana mentira de que
+el método toString de la clase Object de Java imprime por defecto una dirección
+de memoria. He decidido desmontar el mito.</p>
+<p><strong>TL;DR</strong>: no. No son direcciones de memoria y ni siquiera tienen
+nada que ver con direcciones de memoria hasta donde he podido probar.</p>
+<p>Estamos a 2023 y sigo preguntando a mis alumnos qué creen que es el numerito
+que sale al imprimir un array en Java y todos, sin ni una sola excepción, me 
+siguen diciendo con total seguridad alguna variante de <q>es la dirección de
+memoria, me lo ha contado mi profesor</q>.</p>
+<p>Algunos me han respondido perfectamente <q>es el código hash</q>, pero tras
+preguntarles <q>¿qué es eso?</q> me sueltan el rollo de la dirección de 
+memoria. O me responden correctamente pero a su vez comentando que el hash es
+generado a partir de la dirección de memoria.</p>
+<p>Piénsalo, ¿por qué dos objetos creados uno
+inmediatamente después del otro tienen supuestas direcciones tan distintas?</p>
+<p>Veamos una prueba:</p>
+<pre><code class="language-java">public static void main {
+    for(int i = 0; i &lt; 10; i++) {
+        // Creo e imprimo un array de enteros de tamaño 1 que por 
+        // por defecto contiene 0
+        System.out.println(new int[1]);
+    }
+}
+</code></pre>
+<p>Un resultado posible:</p>
+<pre><code>[I@6d03e736
+[I@568db2f2
+[I@378bf509
+[I@5fd0d5ae
+[I@2d98a335
+[I@16b98e56
+[I@7ef20235
+[I@27d6c5e0
+[I@4f3f5b24
+[I@15aeb7ab
+</code></pre>
+<p>El toString() de los arrays nos indica su clase usando <code>[</code> para indicar que es
+un array e <code>I</code> para indicar que es de valores int. Utiliza el <code>@</code> como separador del <strong>hashcode en hexadecimal</strong>.</p>
+<p>Si pruebas ese código seguramente obtendrás un resultado distinto, pero
+es probable que aunque reejecutes el programa siempre te arroje los mismos
+hashes, incluso cambiando el tipo de dato. En alguna máquina y 
+versiones del JDK puede ocurrir lo contrario, que varíe siempre en cada
+ejecución y sin cambiar el código.</p>
+<p>Ese número por alguna razón que no comprendo es vendido como que es la dirección
+de memoria donde se encuentra o comienza el array. Y no, es literalmente el 
+entero que devuelve el método hashCode() convertido a hexadecimal, y no, dicho
+número no es la dirección de memoria ni una parte de la misma.</p>
+<p>Además la distancia entre los números es caótica. Sabemos que lo normal es que
+los datos se almacenen en zonas relativamente cercanas de la memoria disponible y
+este no es ni por asomo el caso.</p>
+<h2>La limitación de memoria</h2>
+<p>El hashcode es un valor de tipo int. Un entero en Java es un
+tipo de dato de 4 bytes (32 bits). 
+De hecho, fíjate que el hexadecimal mostrado
+tiene 8 dígitos y cada dígito hexadecimal representa exactamente 4 bits.</p>
+<p>Si fueran meras direcciones de memoria significaría que estaríamos limitados
+a 4.294.967.296 direcciones (2³²). Si 
+cada dirección puede apuntar a un byte en
+memoria estaríamos hablando de 4GiB. Esto es lo que marca la
+mayor diferencia entre los sistemas operativos de 32 bits y 64 bits: los
+primeros sólo pueden direccionar hasta 4GiB de memoria, resultando en sistemas
+que no aprovechaban más de 4GiB de RAM. Así que como mucho podríamos decir que
+es una parte de la dirección de memoria (que ya te adelanto que tampoco).</p>
+<p>Al ser el hashcode un tipo int, ¿qué pasaría si tenemos más de 4.294.967.296
+objetos? Pues que indudablemente algún objeto emitirá un hashcode repetido.
+Y te garantizo que esto ocurrirá mucho antes, sin necesidad de generar
+tantos. El hashCode() estándar garantiza una buena distribución aleatoria pero
+no unicidad.</p>
+<h2>No son direcciones pero, ¿tienen algo que ver?</h2>
+<p>Los objetos son recolocados constantemente, movidos continuamente en la memoria
+por el recolector de basura con el objetivo de reducir la fragmentación entre
+otros. El hashCode() 
+estándar de Object 
+siempre devolverá el mismo valor para el mismo objeto durante lo que dure su
+vida en el programa independientemente de su ubicación en memoria. Ya sabemos
+que al menos no utilizan 
+<strong>su dirección de memoria actual</strong> o el hashcode variaría continuamente.</p>
+<p>Pero, ¿será que utilizan la primera dirección donde se crearon y almacenan el
+hash generado? En ese caso no sería difícil encontrar una mayor cantidad de
+repeticiones, al reutilizarse zonas cercanas de memoria. Podría ocurrir que
+muchos objetos nacieran con el mismo hash en procesos de construcción y 
+destrucción continuos.</p>
+<h2>La realidad</h2>
+<p>Existen múltiples técnicas para generar el hashcode inicial. Algunas patentadas,
+otras bien ofuscadas y ocultas. Me imagino que sí, algunas usarán la propia
+dirección de memoria, si no en el JDK patentado, quizás sí en algunas primeras
+versiones de Java o en otros lenguajes.</p>
+<p>Pero todas las que yo personalmente he encontrado han sido basadas en generación
+de números aleatorios usando el thread state o en generación a
+partir de una secuencia sin implicar a la memoria.</p>
+<p>Por ejemplo, en las fuentes del OpenJDK desde la versión 6 (no he revisado
+anteriores) solo vemos estas técnicas y NADA que tenga que ver con direcciones
+de memoria.</p>
+<h2>El origen de la patraña</h2>
+<p>Lo desconozco. Incluso en versiones viejas de la documentación de Java,
+respecto a técnicas de hashing basada en memoria encontramos:</p>
+<blockquote>(...) this implementation technique is <strong>not</strong> 
+required by the JavaTM programming language.</blockquote>
+
+<p>Hablo de documentación de hará casi dos décadas.</p>
+</div>
+        <footer class="post__footer"><a class="tag" href="https://alexvgjm.github.io/blog/tag/java">Java</a><a class="tag" href="https://alexvgjm.github.io/blog/tag/curiosidades">Curiosidades</a>
+        </footer>
+      </article>
+      <section class="post__comments giscus"></section>
+    </main>
+    <footer class="main-footer">Alexander Vega Jiménez &copy; 2023</footer>
+  </body>
+</html>
